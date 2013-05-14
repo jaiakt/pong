@@ -14,6 +14,7 @@ public class Main extends StateBasedGame
 	public void initStatesList(GameContainer c) throws SlickException
 	{
 		addState(new Menu());
+		addState(new Game());
 	}
 	
 	public static void main (String [] args)
