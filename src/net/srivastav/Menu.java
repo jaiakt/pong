@@ -4,6 +4,7 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.*;
 import java.awt.Font;
+import org.newdawn.slick.gui.*;
 
 public class Menu extends BasicGameState
 {
@@ -105,13 +106,26 @@ public class Menu extends BasicGameState
 		final int exitButtonYStart = c.getHeight() / 2;
 		final int exitButtonXEnd = c.getWidth() / 8 * 7;
 		final int exitButtonYEnd = c.getHeight() / 8 * 6;
+		
+		MouseOverArea startMouseOverArea = new MouseOverArea(
+				c, null,
+				startButtonXStart,
+				startButtonYStart,
+				startButtonXEnd - startButtonXStart,
+				startButtonYEnd - startButtonYStart
+		);
+		
+		MouseOverArea exitMouseOverArea = new MouseOverArea(
+				c, null,
+				exitButtonXStart,
+				exitButtonYStart,
+				exitButtonXEnd - exitButtonXStart,
+				exitButtonYEnd - exitButtonYStart
+		);
 
 		Input in = c.getInput();
-		int posX = in.getMouseX();
-		int posY = in.getMouseY();
 
-		if (posX > startButtonXStart && posX < startButtonXEnd && 
-				posY > startButtonYStart && posY < startButtonYEnd)
+		if (startMouseOverArea.isMouseOver())
 		{
 			startButtonHover = true;
 			if (in.isMouseButtonDown(0))
@@ -121,8 +135,7 @@ public class Menu extends BasicGameState
 		}
 		else
 			startButtonHover = false;
-		if (posX > exitButtonXStart && posX < exitButtonXEnd &&
-				posY > exitButtonYStart && posY < exitButtonYEnd)
+		if (exitMouseOverArea.isMouseOver())
 		{
 			exitButtonHover = true;
 			if (in.isMouseButtonDown(0))
