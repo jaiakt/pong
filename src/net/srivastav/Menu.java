@@ -13,7 +13,7 @@ public class Menu extends BasicGameState
 	boolean startButtonHover;
 	boolean exitButtonHover;
 	@Override
-	public void init(GameContainer c, StateBasedGame sbg)
+	public void init(GameContainer gc, StateBasedGame sbg)
 	throws SlickException
 	{
 		starTileImage = new Image("assets/starTile.gif");
@@ -24,7 +24,7 @@ public class Menu extends BasicGameState
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void render(GameContainer c, StateBasedGame sbg, Graphics g)
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 	throws SlickException
 	{
 		UnicodeFont font = new UnicodeFont(new java.awt.Font ("Verdana", Font.BOLD, 40));
@@ -33,9 +33,9 @@ public class Menu extends BasicGameState
 		font.loadGlyphs();
 		g.setFont(font);
 		// Draw Background
-		for (int x = 0; x < c.getWidth(); x += starTileImage.getWidth())
+		for (int x = 0; x < gc.getWidth(); x += starTileImage.getWidth())
 		{
-			for (int y = 0; y < c.getHeight(); y += starTileImage.getHeight())
+			for (int y = 0; y < gc.getHeight(); y += starTileImage.getHeight())
 			{
 				g.drawImage(starTileImage, x, y);
 			}
@@ -43,25 +43,30 @@ public class Menu extends BasicGameState
 
 		// Draw Title
 		g.drawImage(titleImage,
-				(c.getWidth() / 2) - (titleImage.getWidth() / 2),
-				c.getHeight() / 20);
+				(gc.getWidth() / 2) - (titleImage.getWidth() / 2),
+				gc.getHeight() / 20);
 
-		final int startButtonXStart = c.getWidth() / 8;
-		final int startButtonYStart = c.getHeight() / 2;
-		final int startButtonXEnd = c.getWidth() / 8 * 3;
-		final int startButtonYEnd = c.getHeight() / 8 * 6;
+		final int startButtonXStart = gc.getWidth() / 8;
+		final int startButtonYStart = gc.getHeight() / 2;
+		final int startButtonXEnd = gc.getWidth() / 8 * 3;
+		final int startButtonYEnd = gc.getHeight() / 8 * 6;
 
-		final int exitButtonXStart = c.getWidth() / 8 * 5;
-		final int exitButtonYStart = c.getHeight() / 2;
-		final int exitButtonXEnd = c.getWidth() / 8 * 7;
-		final int exitButtonYEnd = c.getHeight() / 8 * 6;
+		final int exitButtonXStart = gc.getWidth() / 8 * 5;
+		final int exitButtonYStart = gc.getHeight() / 2;
+		final int exitButtonXEnd = gc.getWidth() / 8 * 7;
+		final int exitButtonYEnd = gc.getHeight() / 8 * 6;
 		
-		if (startButtonHover)
-			g.setColor(new Color(97, 252, 0));
-		else
-			g.setColor(new Color(29, 252, 0));
+		
 
 		// Draw Buttons
+		final Color buttonDefaultColor = new Color(97, 252, 0);
+		final Color buttonHoverColor = new Color(29, 252, 0);
+		
+		if (startButtonHover)
+			g.setColor(buttonHoverColor);
+		else
+			g.setColor(buttonDefaultColor);
+		
 		g.fillRoundRect(
 				startButtonXStart, // x start
 				startButtonYStart, // y start
@@ -71,9 +76,9 @@ public class Menu extends BasicGameState
 		); 
 
 		if (exitButtonHover)
-			g.setColor(new Color(97, 252, 0));
+			g.setColor(buttonHoverColor);
 		else
-			g.setColor(new Color(29, 252, 0));
+			g.setColor(buttonDefaultColor);
 		
 		g.fillRoundRect(
 				exitButtonXStart, // x start
@@ -85,30 +90,33 @@ public class Menu extends BasicGameState
 
 		g.setColor(Color.black);
 
+		final int xOffset = 0;
+		final int yOffset = -5;
+		
 		g.drawString("Play",
-				((startButtonXStart + startButtonXEnd) / 2) - (g.getFont().getWidth("Play") / 2),
-				((startButtonYStart + startButtonYEnd) / 2) - (g.getFont().getHeight("Play") / 2));
+				((startButtonXStart + startButtonXEnd) / 2) - (g.getFont().getWidth("Play") / 2) + xOffset,
+				((startButtonYStart + startButtonYEnd) / 2) - (g.getFont().getHeight("Play") / 2) + yOffset);
 		g.drawString("Exit",
-				((exitButtonXStart + exitButtonXEnd) / 2) - (g.getFont().getWidth("Exit") / 2),
-				((exitButtonYStart + exitButtonYEnd) / 2) - (g.getFont().getHeight("Exit") / 2));
+				((exitButtonXStart + exitButtonXEnd) / 2) - (g.getFont().getWidth("Exit") / 2) + xOffset,
+				((exitButtonYStart + exitButtonYEnd) / 2) - (g.getFont().getHeight("Exit") / 2) + yOffset);
 	}
 
 	@Override
-	public void update(GameContainer c, StateBasedGame sbg, int delta)
+	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 	throws SlickException
 	{
-		final int startButtonXStart = c.getWidth() / 8;
-		final int startButtonYStart = c.getHeight() / 2;
-		final int startButtonXEnd = c.getWidth() / 8 * 3;
-		final int startButtonYEnd = c.getHeight() / 8 * 6;
+		final int startButtonXStart = gc.getWidth() / 8;
+		final int startButtonYStart = gc.getHeight() / 2;
+		final int startButtonXEnd = gc.getWidth() / 8 * 3;
+		final int startButtonYEnd = gc.getHeight() / 8 * 6;
 
-		final int exitButtonXStart = c.getWidth() / 8 * 5;
-		final int exitButtonYStart = c.getHeight() / 2;
-		final int exitButtonXEnd = c.getWidth() / 8 * 7;
-		final int exitButtonYEnd = c.getHeight() / 8 * 6;
+		final int exitButtonXStart = gc.getWidth() / 8 * 5;
+		final int exitButtonYStart = gc.getHeight() / 2;
+		final int exitButtonXEnd = gc.getWidth() / 8 * 7;
+		final int exitButtonYEnd = gc.getHeight() / 8 * 6;
 		
 		MouseOverArea startMouseOverArea = new MouseOverArea(
-				c, null,
+				gc, null,
 				startButtonXStart,
 				startButtonYStart,
 				startButtonXEnd - startButtonXStart,
@@ -116,14 +124,14 @@ public class Menu extends BasicGameState
 		);
 		
 		MouseOverArea exitMouseOverArea = new MouseOverArea(
-				c, null,
+				gc, null,
 				exitButtonXStart,
 				exitButtonYStart,
 				exitButtonXEnd - exitButtonXStart,
 				exitButtonYEnd - exitButtonYStart
 		);
 
-		Input in = c.getInput();
+		Input in = gc.getInput();
 
 		if (startMouseOverArea.isMouseOver())
 		{
@@ -140,7 +148,7 @@ public class Menu extends BasicGameState
 			exitButtonHover = true;
 			if (in.isMouseButtonDown(0))
 			{
-				c.exit();
+				gc.exit();
 			}
 		}
 		else
