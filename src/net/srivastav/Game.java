@@ -1,6 +1,7 @@
 package net.srivastav;
 
-import java.awt.Point;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
@@ -14,13 +15,17 @@ public class Game extends BasicGameState
 	int topBoundary;
 	int botBoundary;
 	int ballRadius;	
-	Point ballLocation;
+	Point2D.Double ballLocation;
 	int ballSpeed;
 	double ballAngle;
 	int paddleHeight;
 	int paddle1Location;
 	int paddle2Location;
-	Point mousePos;
+	int paddleMargin;
+	int paddleWidth;
+	Point2D.Double mousePos;
+	int collisionTime;
+	int collisionReset;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
@@ -31,15 +36,19 @@ public class Game extends BasicGameState
 	
 		starTileImage = new Image("assets/starTile.gif");
 		topBoundary = botBoundary = 0;
-		ballRadius = 20;
-		ballAngle = (int)(Math.random() * 2) * Math.PI;
+		ballRadius = 10;
 		ballSpeed = 1;
-		ballLocation = new Point(gc.getWidth() / 2, gc.getHeight() / 2); 
+		ballLocation = new Point2D.Double(gc.getWidth() / 2, gc.getHeight() / 2); 
+		ballAngle = 0 + (int) (Math.random() * 2) * Math.PI;
 		
 		paddleHeight = 100;
+		paddleMargin = 15;
+		paddleWidth = 5;
 		
+		collisionTime = 0;
+		collisionReset = 50;
 		paddle1Location = paddle2Location = gc.getHeight() / 2;
-		mousePos = new Point();
+		mousePos = new Point2D.Double();
 	}
 
 	@Override
@@ -97,13 +106,11 @@ public class Game extends BasicGameState
 		
 		g.setColor(ballColor);
 		
-		g.fillOval(ballLocation.x, ballLocation.y, ballRadius, ballRadius);
+		g.fillOval((int) ballLocation.x - ballRadius, (int) ballLocation.y - ballRadius, ballRadius * 2, ballRadius * 2);
 		
 		// Draw Paddles
 		final Color paddleFillColor = Color.gray;
 		final Color paddleDrawColor = Color.white;
-		final int paddleWidth = 5;
-		final int paddleMargin = 15;
 		
 		g.setColor(paddleFillColor);
 		
@@ -134,7 +141,7 @@ public class Game extends BasicGameState
 		
 		// Write Mouse Pos
 		if (mousePos != null)
-			g.drawString(String.format("%d. %d", mousePos.x, mousePos.y), 200, 200);
+			g.drawString(String.format("%d. %d", (int) mousePos.x, (int) mousePos.y), 200, 200);
 	}
 
 	@Override
@@ -163,7 +170,7 @@ public class Game extends BasicGameState
 			speed--;
 		}
 		
-		// Move Paddle
+		// Move Paddle1
 		if (in.isKeyDown(Input.KEY_UP) && in.isKeyDown(Input.KEY_DOWN))
 		{
 			// DO NOTHING
@@ -179,30 +186,63 @@ public class Game extends BasicGameState
 					paddle1Location + 1);
 		}
 		
-		// Check for collisions
-		if (ballLocation.x <= 0)
-			ballAngle = 3 * Math.PI - ballAngle; 
-		if (ballLocation.x >= gc.getWidth())
-			ballAngle = Math.PI - ballAngle;
-		/*
-		if (ballLocation.y <= 0)
-			ballAngle = - ballAngle + 2 * Math.PI;
-			*/
+		// Move Paddle2
+		if (in.isKeyDown(Input.KEY_A) && in.isKeyDown(Input.KEY_Z))
+		{
+			// DO NOTHING
+		}
+		else if (in.isKeyDown(Input.KEY_A))
+		{
+			paddle2Location = Math.max(topBoundary + paddleHeight / 2,
+					paddle2Location - 1);
+		}
+		else if (in.isKeyDown(Input.KEY_Z))
+		{
+			paddle2Location = Math.min(botBoundary - paddleHeight / 2,
+					paddle2Location + 1);
+		}
 		
-		System.out.println(ballAngle / Math.PI);
-		System.out.println(Math.sin(ballAngle));
+		// Check for collisions
+		collisionTime += 5;
+		
+		if (collisionTime >= collisionReset)
+		{
+			System.out.println(((int) ballLocation.x + " " + ballRadius) + " " + (paddleMargin + " " + paddleWidth));
+			// Check for collision with paddle1
+			if ((int) ballLocation.x + ballRadius >= paddleMargin &&
+					(int) ballLocation.x - ballRadius <= paddleMargin + paddleWidth &&
+					(int) ballLocation.y + ballRadius >= paddle1Location - paddleHeight / 2 &&
+					(int) ballLocation.y - ballRadius <= paddle1Location + paddleHeight / 2)
+			{
+				// Change angle relative to distance from center
+				int distance = paddle1Location - (int) ballLocation.y;
+				int maxDistance = paddleHeight / 2;
+				ballAngle = Math.PI / 4 * ((double) distance / maxDistance);
+				collisionTime = 0;
+			}
+		}
+		
+		if (collisionTime >= collisionReset)
+		{
+			// Check for collision with paddle2
+			if ((int) ballLocation.x + ballRadius >= gc.getWidth() - paddleMargin - paddleWidth &&
+				(int) ballLocation.x - ballRadius <= gc.getWidth() - paddleMargin &&
+				(int) ballLocation.y + ballRadius >= paddle2Location - paddleHeight / 2 &&
+				(int) ballLocation.y - ballRadius <= paddle2Location + paddleHeight / 2)
+			{
+				// Change angle relative to distance from center
+				int distance = paddle2Location - (int) ballLocation.y;
+				int maxDistance = paddleHeight / 2;
+				ballAngle = Math.PI - (Math.PI / 4 * ((double) distance / maxDistance));
+				collisionTime = 0;
+			}
+		}
+		
 		// Move Ball
-		double tempAngle = ballAngle;
-		if (tempAngle < Math.PI)
-		{
-			ballLocation.x += ballSpeed * Math.cos(tempAngle);
-			ballLocation.y += ballSpeed * Math.sin(tempAngle);
-		}
-		else
-		{
-			ballLocation.x += ballSpeed * Math.cos(tempAngle);
-			ballLocation.y += ballSpeed * Math.sin(tempAngle);
-		}
+		
+		System.out.println(Math.cos(ballAngle) + " " + Math.sin(ballAngle));
+		ballLocation.x += ballSpeed * Math.cos(ballAngle);
+		ballLocation.y -= ballSpeed * Math.sin(ballAngle);
 		
 	}
 	
