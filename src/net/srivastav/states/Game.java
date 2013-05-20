@@ -5,7 +5,6 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 import org.newdawn.slick.font.effects.ColorEffect;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import net.srivastav.Singleton;
 
 
@@ -23,10 +22,11 @@ public class Game extends BasicGameState
 	double ballSpeed;
 	double ballAngle;
 	int paddleHeight;
-	int paddle1Location;
-	int paddle2Location;
+	double paddle1Location;
+	double paddle2Location;
 	int paddleMargin;
 	int paddleWidth;
+	double paddleSpeed;
 	int dottedLineMargin;
 	Point2D.Double mousePos;
 	int player1Score;
@@ -43,13 +43,14 @@ public class Game extends BasicGameState
 		starTileImage = new Image("assets/starTile.gif");
 		topBoundary = botBoundary = 0;
 		ballRadius = 10;
-		ballSpeed = 1.5;
+		ballSpeed = 7;
 		ballLocation = new Point2D.Double(gc.getWidth() / 2, gc.getHeight() / 2); 
 		ballAngle = 0 + (int) (Math.random() * 2) * Math.PI;
 		
-		paddleHeight = 50;
+		paddleHeight = 75;
 		paddleMargin = 15;
 		paddleWidth = 5;
+		paddleSpeed = 2.5;
 		
 		dottedLineMargin = 10;
 		
@@ -57,7 +58,7 @@ public class Game extends BasicGameState
 		mousePos = new Point2D.Double();
 		
 		player1Score = player2Score = 0;
-		finalScore = 2;
+		finalScore = 7;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -124,12 +125,12 @@ public class Game extends BasicGameState
 		g.setColor(paddleFillColor);
 		
 		g.fillRect(paddleMargin,
-				paddle1Location - paddleHeight / 2,
+				(int) paddle1Location - paddleHeight / 2,
 				paddleWidth,
 				paddleHeight
 		);
 		g.fillRect(gc.getWidth() - paddleMargin - paddleWidth,
-				paddle2Location - paddleHeight / 2,
+				(int) paddle2Location - paddleHeight / 2,
 				paddleWidth,
 				paddleHeight
 		);
@@ -137,12 +138,12 @@ public class Game extends BasicGameState
 		g.setColor(paddleDrawColor);
 		
 		g.drawRect(paddleMargin,
-				paddle1Location - paddleHeight / 2,
+				(int) paddle1Location - paddleHeight / 2,
 				paddleWidth,
 				paddleHeight
 		);
 		g.drawRect(gc.getWidth() - paddleMargin - paddleWidth,
-				paddle2Location - paddleHeight / 2,
+				(int) paddle2Location - paddleHeight / 2,
 				paddleWidth,
 				paddleHeight
 		);
@@ -212,12 +213,12 @@ public class Game extends BasicGameState
 		else if (in.isKeyDown(Input.KEY_UP))
 		{
 			paddle1Location = Math.max(topBoundary + paddleHeight / 2,
-					paddle1Location - 1);
+					paddle1Location - paddleSpeed);
 		}
 		else if (in.isKeyDown(Input.KEY_DOWN))
 		{
 			paddle1Location = Math.min(botBoundary - paddleHeight / 2,
-					paddle1Location + 1);
+					paddle1Location + paddleSpeed);
 		}
 		
 		// Move Paddle2
@@ -228,12 +229,12 @@ public class Game extends BasicGameState
 		else if (in.isKeyDown(Input.KEY_A))
 		{
 			paddle2Location = Math.max(topBoundary + paddleHeight / 2,
-					paddle2Location - 1);
+					paddle2Location - paddleSpeed);
 		}
 		else if (in.isKeyDown(Input.KEY_Z))
 		{
 			paddle2Location = Math.min(botBoundary - paddleHeight / 2,
-					paddle2Location + 1);
+					paddle2Location + paddleSpeed);
 		}
 		
 		// Check for collisions
@@ -256,7 +257,7 @@ public class Game extends BasicGameState
 				(int) ballLocation.y - ballRadius <= paddle1Location + paddleHeight / 2)
 		{
 			// Change angle relative to distance from center
-			int distance = paddle1Location - (int) ballLocation.y;
+			int distance = (int) paddle1Location - (int) ballLocation.y;
 			int maxDistance = paddleHeight / 2;
 			ballAngle = Math.PI / 4 * ((double) distance / maxDistance);
 		}
@@ -268,7 +269,7 @@ public class Game extends BasicGameState
 			(int) ballLocation.y - ballRadius <= paddle2Location + paddleHeight / 2)
 		{
 			// Change angle relative to distance from center
-			int distance = paddle2Location - (int) ballLocation.y;
+			int distance = (int) paddle2Location - (int) ballLocation.y;
 			int maxDistance = paddleHeight / 2;
 			ballAngle = Math.PI - (Math.PI / 4 * ((double) distance / maxDistance));
 		}
