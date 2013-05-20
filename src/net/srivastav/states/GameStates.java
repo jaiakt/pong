@@ -1,4 +1,4 @@
-package net.srivastav;
+package net.srivastav.states;
 
 public enum GameStates
 {

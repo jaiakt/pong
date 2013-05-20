@@ -1,4 +1,5 @@
-package net.srivastav;
+package net.srivastav.states;
+
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.font.effects.ColorEffect;

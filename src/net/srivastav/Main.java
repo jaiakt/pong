@@ -2,6 +2,8 @@ package net.srivastav;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
+import net.srivastav.states.*;
+import net.srivastav.states.Game;
 
 public class Main extends StateBasedGame
 {
@@ -15,6 +17,7 @@ public class Main extends StateBasedGame
 	{
 		addState(new Menu());
 		addState(new Game());
+		addState(new GameOver());
 	}
 	
 	public static void main (String [] args)
