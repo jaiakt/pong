@@ -3,8 +3,9 @@ package net.srivastav.states;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
-import org.newdawn.slick.font.effects.ColorEffect;
 import java.awt.geom.Point2D;
+
+import net.srivastav.Fonts;
 import net.srivastav.Singleton;
 
 
@@ -29,6 +30,7 @@ public class Game extends BasicGameState
 	double paddleSpeed;
 	int dottedLineMargin;
 	Point2D.Double mousePos;
+	UnicodeFont scoreFont;
 	int player1Score;
 	int player2Score;
 	int finalScore;
@@ -43,25 +45,25 @@ public class Game extends BasicGameState
 		starTileImage = new Image("assets/starTile.gif");
 		topBoundary = botBoundary = 0;
 		ballRadius = 10;
-		ballSpeed = 7;
+		ballSpeed = 3;
 		ballLocation = new Point2D.Double(gc.getWidth() / 2, gc.getHeight() / 2); 
-		ballAngle = 0 + (int) (Math.random() * 2) * Math.PI;
+		ballAngle = (int) (Math.random() * 2) * Math.PI;
 		
 		paddleHeight = 75;
 		paddleMargin = 15;
 		paddleWidth = 5;
-		paddleSpeed = 2.5;
+		paddleSpeed = 1.0;
 		
 		dottedLineMargin = 10;
 		
 		paddle1Location = paddle2Location = gc.getHeight() / 2;
 		mousePos = new Point2D.Double();
 		
+		scoreFont = Fonts.getRetroFont(java.awt.Color.white, 50.f);
 		player1Score = player2Score = 0;
-		finalScore = 7;
+		finalScore = 1;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException
@@ -149,11 +151,7 @@ public class Game extends BasicGameState
 		);
 		
 		// Draw Score
-		UnicodeFont font = new UnicodeFont(new java.awt.Font ("Verdana", java.awt.Font.BOLD, 50));
-		font.getEffects().add(new ColorEffect(java.awt.Color.white));
-		font.addNeheGlyphs();
-		font.loadGlyphs();
-		g.setFont(font);
+		g.setFont(scoreFont);
 		g.drawString("" + player1Score, (gc.getWidth() / 4) - (g.getFont().getWidth("" + player1Score) / 2),
 				(gc.getHeight() / 8) - (g.getFont().getHeight("" + player1Score) / 2));
 		g.drawString("" + player2Score, (gc.getWidth() * 3 / 4) - (g.getFont().getWidth("" + player2Score) / 2),
@@ -275,8 +273,6 @@ public class Game extends BasicGameState
 		}
 		
 		// Move Ball
-		
-		System.out.println(Math.cos(ballAngle) + " " + Math.sin(ballAngle));
 		ballLocation.x += ballSpeed * Math.cos(ballAngle);
 		ballLocation.y -= ballSpeed * Math.sin(ballAngle);
 		
@@ -286,7 +282,7 @@ public class Game extends BasicGameState
 	{
 		if (player == 1)
 		{
-			if (++player1Score == finalScore)
+			if (++player1Score >= finalScore)
 			{
 				Singleton.winner = 1;
 				return true;
@@ -294,7 +290,7 @@ public class Game extends BasicGameState
 		}
 		if (player == 2)
 		{
-			if (++player2Score == finalScore)
+			if (++player2Score >= finalScore)
 			{
 				Singleton.winner = 2;
 				return true;

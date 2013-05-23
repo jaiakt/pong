@@ -3,7 +3,8 @@ package net.srivastav.states;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 
-public class StateTemplate extends BasicGameState {
+public class StateTemplate extends BasicGameState 
+{
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
