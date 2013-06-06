@@ -45,14 +45,11 @@ public class Game extends BasicGameState
 		starTileImage = new Image("assets/starTile.gif");
 		topBoundary = botBoundary = 0;
 		ballRadius = 10;
-		ballSpeed = 3;
 		ballLocation = new Point2D.Double(gc.getWidth() / 2, gc.getHeight() / 2); 
 		ballAngle = (int) (Math.random() * 2) * Math.PI;
 		
-		paddleHeight = 75;
 		paddleMargin = 15;
 		paddleWidth = 5;
-		paddleSpeed = 1.0;
 		
 		dottedLineMargin = 10;
 		
@@ -62,6 +59,19 @@ public class Game extends BasicGameState
 		scoreFont = Fonts.getRetroFont(java.awt.Color.white, 50.f);
 		player1Score = player2Score = 0;
 		finalScore = 1;
+		
+		if (Singleton.difficulty == 0)
+		{
+			ballSpeed = 10;
+			paddleHeight = 100;
+			paddleSpeed = 1.0;
+		}
+		if (Singleton.difficulty == 1)
+		{
+			ballSpeed = 10;
+			paddleHeight = 75;
+			paddleSpeed = 0.9;
+		}
 	}
 
 	@Override
@@ -305,6 +315,17 @@ public class Game extends BasicGameState
 		ballLocation.y = gc.getHeight() / 2;
 		ballAngle = (int)(Math.random() * 2) * Math.PI;
 	}
+	
+	@Override
+	public void enter(GameContainer gc, StateBasedGame sbg)
+	{
+		paddle1Location = paddle2Location = gc.getHeight() / 2;
+		player1Score = player2Score = 0;
+		
+		reset(gc);
+	}
+	
+	
 	
 	@Override
 	public int getID()

@@ -177,7 +177,7 @@ public class Menu extends BasicGameState
 			playButtonHover = true;
 			if (in.isMouseButtonDown(0))
 			{
-				sbg.enterState(GameStates.IN_GAME.ordinal());
+				sbg.enterState(GameStates.LEVELS.ordinal());
 			}
 		}
 		else

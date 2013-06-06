@@ -18,6 +18,8 @@ public class Main extends StateBasedGame
 		addState(new Menu());
 		addState(new Game());
 		addState(new GameOver());
+		addState(new Settings());
+		addState(new Levels());
 	}
 	
 	public static void main (String [] args)
