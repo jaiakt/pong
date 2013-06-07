@@ -17,11 +17,13 @@ public class Levels extends BasicGameState
 	boolean[] hovers = new boolean[buttons.length];
 	String[] buttonLabels = {"Easy", "Medium", "Hard"};
 	int countdown;
+	Image starTileImage = null;
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException
 	{
+		starTileImage = new Image("assets/starTile.gif");
 		buttonFont = Fonts.getRetroFont(java.awt.Color.black, 40);
 		int xStart = gc.getWidth() / 4;
 		int width = gc.getWidth() / 2;
@@ -41,6 +43,14 @@ public class Levels extends BasicGameState
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException
 	{
+		// Draw Background
+		for (int x = 0; x < gc.getWidth(); x += starTileImage.getWidth())
+		{
+			for (int y = 0; y < gc.getHeight(); y += starTileImage.getHeight())
+			{
+				g.drawImage(starTileImage, x, y);
+			}
+		}
 		Rectangle b;
 		for (int i = 0; i < buttons.length; ++i)
 		{
