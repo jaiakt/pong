@@ -7,6 +7,7 @@ import net.srivastav.Singleton;
 import org.newdawn.slick.*;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.state.*;
+
 import java.awt.Rectangle;
 
 public class Levels extends BasicGameState 
@@ -15,6 +16,7 @@ public class Levels extends BasicGameState
 	Rectangle[] buttons = new Rectangle[3];
 	boolean[] hovers = new boolean[buttons.length];
 	String[] buttonLabels = {"Easy", "Medium", "Hard"};
+	int countdown;
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
@@ -32,6 +34,7 @@ public class Levels extends BasicGameState
 		{
 			hovers[i] = false;
 		}
+		countdown = 200;
 	}
 
 	@Override
@@ -61,6 +64,9 @@ public class Levels extends BasicGameState
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException
 	{
+		countdown -= delta;
+		if (countdown > 0)
+			return;
 		MouseOverArea[] MOAS = new MouseOverArea[3];
 		Rectangle b;
 		for (int i = 0; i < MOAS.length; ++i)
@@ -119,6 +125,12 @@ public class Levels extends BasicGameState
 		sbg.enterState(GameStates.IN_GAME.ordinal());
 	}
 
+	@Override
+	public void enter(GameContainer gc, StateBasedGame sbg)
+	{
+		countdown = 200;
+	}
+	
 	@Override
 	public int getID()
 	{
