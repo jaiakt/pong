@@ -114,7 +114,8 @@ public class Levels extends BasicGameState
 	
 	private void launch(StateBasedGame sbg, int diff)
 	{
-		Singleton.difficulty = diff;
+		Singleton.getInstance().difficulty = diff;
+		System.out.println(Singleton.getInstance().difficulty);
 		sbg.enterState(GameStates.IN_GAME.ordinal());
 	}
 

@@ -1,6 +1,17 @@
 package net.srivastav;
 
 public class Singleton {
-	public static int difficulty;
-	public static int winner;
+
+	private static final Singleton singleton = new Singleton();
+	
+	public int winner;
+	public int difficulty;
+
+	private Singleton() {
+	}
+
+
+	public static Singleton getInstance() {
+		return singleton;
+	}
 }

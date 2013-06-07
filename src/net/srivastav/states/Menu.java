@@ -11,11 +11,9 @@ public class Menu extends BasicGameState
 {
 	UnicodeFont titleFont;
 	UnicodeFont buttonFont;
-	UnicodeFont settingsFont;
 	Image starTileImage = null;
 	boolean playButtonHover;
 	boolean exitButtonHover;
-	boolean settingsButtonHover;
 	
 	int playButtonXStart;
 	int playButtonYStart;
@@ -27,18 +25,12 @@ public class Menu extends BasicGameState
 	int exitButtonXEnd;
 	int exitButtonYEnd;
 	
-	int settingsButtonXStart;
-	int settingsButtonYStart;
-	int settingsButtonXEnd;
-	int settingsButtonYEnd;
-	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 	throws SlickException
 	{
 		titleFont = Fonts.getRetroFont(java.awt.Color.green, 150);
 		buttonFont = Fonts.getRetroFont(java.awt.Color.black, 40);
-		settingsFont = Fonts.getRetroFont(java.awt.Color.black, 25);
 		starTileImage = new Image("assets/starTile.gif");
 		
 		playButtonXStart = gc.getWidth() / 8;
@@ -51,12 +43,7 @@ public class Menu extends BasicGameState
 		exitButtonXEnd = gc.getWidth() / 8 * 7;
 		exitButtonYEnd = gc.getHeight() / 8 * 6;
 		
-		settingsButtonXStart = gc.getWidth() / 8 * 3;
-		settingsButtonXEnd = gc.getWidth() / 8 * 5;
-		settingsButtonYStart = gc.getHeight() * 6 / 8;
-		settingsButtonYEnd = gc.getHeight() * 31 / 32;
-		
-		playButtonHover = exitButtonHover = settingsButtonHover = false;
+		playButtonHover = exitButtonHover = false;
 		
 	}
 
@@ -108,20 +95,6 @@ public class Menu extends BasicGameState
 				40
 		); 
 		
-		if (settingsButtonHover)
-			g.setColor(Constants.buttonHoverColor);
-		else
-			g.setColor(Constants.buttonDefaultColor);
-		
-		g.fillRoundRect(
-				settingsButtonXStart, // x play
-				settingsButtonYStart, // y play
-				settingsButtonXEnd - settingsButtonXStart, // width
-				settingsButtonYEnd - settingsButtonYStart, // height
-				40
-		);
-
-
 		final int xOffset = 0;
 		final int yOffset = -5;
 		
@@ -135,11 +108,6 @@ public class Menu extends BasicGameState
 				((exitButtonXStart + exitButtonXEnd) / 2) - (g.getFont().getWidth(exitButtonLabel) / 2) + xOffset,
 				((exitButtonYStart + exitButtonYEnd) / 2) - (g.getFont().getHeight(exitButtonLabel) / 2) + yOffset);
 		
-		g.setFont(settingsFont);
-		String settingsButtonLabel = "SETTINGS";
-		g.drawString(settingsButtonLabel,
-				((settingsButtonXStart + settingsButtonXEnd) / 2) - (g.getFont().getWidth(settingsButtonLabel) / 2) + xOffset,
-				((settingsButtonYStart + settingsButtonYEnd) / 2) - (g.getFont().getHeight(settingsButtonLabel) / 2) + yOffset);
 	}
 
 	@Override
@@ -162,14 +130,6 @@ public class Menu extends BasicGameState
 				exitButtonYEnd - exitButtonYStart
 		);
 		
-		MouseOverArea settingsMouseOverArea = new MouseOverArea(
-				gc, null,
-				settingsButtonXStart,
-				settingsButtonYStart,
-				settingsButtonXEnd - settingsButtonXStart,
-				settingsButtonYEnd - settingsButtonYStart
-		);
-
 		Input in = gc.getInput();
 
 		if (playMouseOverArea.isMouseOver())
@@ -195,18 +155,6 @@ public class Menu extends BasicGameState
 		else
 		{
 			exitButtonHover = false;
-		}
-		if (settingsMouseOverArea.isMouseOver())
-		{
-			settingsButtonHover = true;
-			if (in.isMouseButtonDown(0))
-			{
-				sbg.enterState(GameStates.MENU.ordinal());
-			}
-		}
-		else
-		{
-			settingsButtonHover = false;
 		}
 	}
 

@@ -58,20 +58,7 @@ public class Game extends BasicGameState
 		
 		scoreFont = Fonts.getRetroFont(java.awt.Color.white, 50.f);
 		player1Score = player2Score = 0;
-		finalScore = 1;
-		
-		if (Singleton.difficulty == 0)
-		{
-			ballSpeed = 10;
-			paddleHeight = 100;
-			paddleSpeed = 1.0;
-		}
-		if (Singleton.difficulty == 1)
-		{
-			ballSpeed = 10;
-			paddleHeight = 75;
-			paddleSpeed = 0.9;
-		}
+		finalScore = 11;
 	}
 
 	@Override
@@ -182,6 +169,25 @@ public class Game extends BasicGameState
 			return;
 		}
 		current = 0;
+		
+		if (Singleton.getInstance().difficulty == 0)
+		{
+			ballSpeed = 1.75;
+			paddleHeight = 100;
+			paddleSpeed = 1.0;
+		}
+		else if (Singleton.getInstance().difficulty == 1)
+		{
+			ballSpeed = 2;
+			paddleHeight = 75;
+			paddleSpeed = 0.9;
+		}
+		else if (Singleton.getInstance().difficulty == 2)
+		{
+			ballSpeed = 3;
+			paddleHeight = 75;
+			paddleSpeed = 1.1;
+		}
 		
 		Input in = gc.getInput();
 		
@@ -294,7 +300,7 @@ public class Game extends BasicGameState
 		{
 			if (++player1Score >= finalScore)
 			{
-				Singleton.winner = 1;
+				Singleton.getInstance().winner = 1;
 				return true;
 			}
 		}
@@ -302,7 +308,7 @@ public class Game extends BasicGameState
 		{
 			if (++player2Score >= finalScore)
 			{
-				Singleton.winner = 2;
+				Singleton.getInstance().winner = 2;
 				return true;
 			}
 		}

@@ -84,7 +84,7 @@ public class GameOver extends BasicGameState
 		
 		// Draw "PLAYER x WON"
 		g.setFont(winnerFont);
-		String playerString = "PLAYER " + Singleton.winner + " WON";
+		String playerString = "PLAYER " + Singleton.getInstance().winner + " WON";
 		g.drawString(playerString,
 				gc.getWidth() / 2 - g.getFont().getWidth(playerString) / 2,
 				gc.getHeight() / 16 * 5 - g.getFont().getHeight(playerString) / 2);
